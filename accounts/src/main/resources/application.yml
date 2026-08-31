@@ -3,6 +3,6 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/bank
+    url: jdbc:postgresql://localhost:5432/bankdb?currentSchema=accounts
     username: postgres
     password: postgres
