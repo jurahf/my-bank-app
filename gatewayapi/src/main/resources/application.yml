@@ -6,7 +6,8 @@ spring:
     name: gatewayapi
   cloud:
     gateway:
-      routes:
+      mvc:
+        routes:
         - id: accounts-api-docs
           uri: http://localhost:8081
           order: 1
