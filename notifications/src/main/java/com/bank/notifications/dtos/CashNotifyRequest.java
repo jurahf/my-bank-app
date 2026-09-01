@@ -3,13 +3,24 @@ package com.bank.notifications.dtos;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public class NotifyRequest {
+public class CashNotifyRequest {
 
     @NotBlank(message="UserId должен быть заполнен")
     private String userId;
 
     @NotBlank(message="UserName должен быть заполнен")
     private String userName;
+
+    @NotNull
+    private double sum;
+
+    public double getSum() {
+        return sum;
+    }
+
+    public void setSum(double sum) {
+        this.sum = sum;
+    }
 
     public String getUserId() {
         return userId;

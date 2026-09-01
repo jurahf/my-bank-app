@@ -1,5 +1,6 @@
 package com.bank.notifications.controllers;
 
+import com.bank.notifications.dtos.CashNotifyRequest;
 import com.bank.notifications.dtos.NotifyRequest;
 import com.bank.notifications.services.NotifyService;
 import jakarta.validation.Valid;
@@ -21,5 +22,10 @@ public class NotifyController {
     @PostMapping("/accountEdited")
     public String accountEdited(@RequestBody @Valid NotifyRequest request) {
         return service.accountEdited(request.getUserId(), request.getUserName());
+    }
+
+    @PostMapping("/cashChanged")
+    public String cashChanged(@RequestBody @Valid CashNotifyRequest request) {
+        return service.cashChanged(request.getUserId(), request.getUserName(), request.getSum());
     }
 }

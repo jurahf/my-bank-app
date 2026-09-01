@@ -19,7 +19,7 @@ public class AccountModel {
     private String name;
 
     @Column(name = "birthdate")
-    private Date BirthDate;
+    private Date birthDate;
 
     @Column(name = "money")
     private Double money;
@@ -41,11 +41,11 @@ public class AccountModel {
     }
 
     public Date getBirthDate() {
-        return BirthDate;
+        return birthDate;
     }
 
     public void setBirthDate(Date birthDate) {
-        BirthDate = birthDate;
+        this.birthDate = birthDate;
     }
 
     public Double getMoney() {

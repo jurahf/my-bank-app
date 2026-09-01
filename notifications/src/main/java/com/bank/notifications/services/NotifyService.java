@@ -19,4 +19,16 @@ public class NotifyService {
 
         return text;
     }
+
+    public String cashChanged(String userId, String userName, double sum) {
+       String text = "";
+       if (sum < 0)
+           text = "Списание на " + Double.toString(sum);
+       else
+           text = "Пополнение на " + Double.toString(sum);
+
+        sender.send(userId, text);
+
+        return text;
+    }
 }
