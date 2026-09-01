@@ -1,8 +1,20 @@
 server:
   port: 8081
+  
+springdoc:
+  swagger-ui:
+    path: /swagger-ui/index.html
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/bankdb?currentSchema=accounts
+    url: jdbc:postgresql://localhost:5432/bankdb
     username: postgres
     password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        default_schema: accounts
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
