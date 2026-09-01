@@ -2,3 +2,4 @@ rootProject.name = 'my-bank-app'
 
 include 'front'
 include 'accounts'
+include 'notifications'
