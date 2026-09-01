@@ -1,5 +1,17 @@
 server:
   port: 8084
-springdoc:
-  swagger-ui:
-    path: /swagger-ui/index.html
+spring:
+  application:
+    name: cash
+  config:
+    import:
+      - "optional:consul:"
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: cash
+      config:
+        enabled: true            # Включаем Consul Config для внешней конфигурации
+        defaultContext: application

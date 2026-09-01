@@ -1,6 +1,7 @@
 package com.bank.accounts.services;
 
 import com.bank.accounts.dtos.AccountDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -12,10 +13,11 @@ import java.util.Map;
 @Service
 public class NotificationRemoteService {
 
-    // TODO: Consul, авторизация
-    private static final String NOTIFY_URL = "http://localhost:8083/api/notify";
+    // TODO: авторизация
+    private static final String NOTIFY_URL = "http://notifications/api/notify";
 
-    private final RestTemplate restTemplate;
+    @Autowired
+    private RestTemplate restTemplate;
 
     public NotificationRemoteService() {
         this.restTemplate = new RestTemplate();

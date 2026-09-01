@@ -1,7 +1,21 @@
 server:
   port: 8081
-  
+
 spring:
+  application:
+    name: accounts
+  config:
+    import:
+      - "optional:consul:"
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: accounts
+      config:
+        enabled: true            # Включаем Consul Config для внешней конфигурации
+        defaultContext: application
   datasource:
     url: jdbc:postgresql://localhost:5432/bankdb
     username: postgres

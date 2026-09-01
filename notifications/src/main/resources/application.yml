@@ -1,2 +1,17 @@
 server:
   port: 8083
+spring:
+  application:
+    name: notifications
+  config:
+    import:
+      - "optional:consul:"
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: notifications
+      config:
+        enabled: true            # Включаем Consul Config для внешней конфигурации
+        defaultContext: application
