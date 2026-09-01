@@ -19,10 +19,6 @@ public class NotificationRemoteService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public NotificationRemoteService() {
-        this.restTemplate = new RestTemplate();
-    }
-
     public void accountEdited(AccountDto account) {
         try {
             Map<String, String> body = Map.of(
