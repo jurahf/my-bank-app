@@ -4,6 +4,22 @@ server:
 spring:
   application:
     name: accounts
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/bank
+
+      client:
+        registration:
+          account-service:
+            provider: keycloak
+            client-id: account-service
+            client-secret: TS4tWP4SkqMpeg7XBuM71XuXQKOcS8ml
+            authorization-grant-type: client_credentials
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/bank
   config:
     import:
       - "optional:consul:"
