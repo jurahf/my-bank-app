@@ -6,6 +6,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
@@ -13,11 +14,10 @@ import java.util.Map;
 @Service
 public class NotificationRemoteService {
 
-    // TODO: авторизация
     private static final String NOTIFY_URL = "http://notifications/api/notify";
 
     @Autowired
-    private RestTemplate restTemplate;
+    private RestClient restClient;
 
     public void accountEdited(AccountDto account) {
         try {
@@ -50,9 +50,10 @@ public class NotificationRemoteService {
     }
 
     private void send(String path, Object body) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        restTemplate.postForObject(NOTIFY_URL + path, new HttpEntity<>(body, headers), String.class);
+        restClient.post()
+                .uri(NOTIFY_URL + path)
+                .body(body)
+                .headers(h -> h.setContentType(MediaType.APPLICATION_JSON))
+                .retrieve();
     }
 }

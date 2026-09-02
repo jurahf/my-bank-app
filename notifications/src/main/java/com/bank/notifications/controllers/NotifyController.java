@@ -4,6 +4,7 @@ import com.bank.notifications.dtos.CashNotifyRequest;
 import com.bank.notifications.dtos.NotifyRequest;
 import com.bank.notifications.services.NotifyService;
 import jakarta.validation.Valid;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,11 +21,13 @@ public class NotifyController {
     }
 
     @PostMapping("/accountEdited")
+    @PreAuthorize("hasRole('SERVICE') && hasRole('NOTIFICATIONS')")
     public String accountEdited(@RequestBody @Valid NotifyRequest request) {
         return service.accountEdited(request.getUserId(), request.getUserName());
     }
 
     @PostMapping("/cashChanged")
+    @PreAuthorize("hasRole('SERVICE') && hasRole('NOTIFICATIONS')")
     public String cashChanged(@RequestBody @Valid CashNotifyRequest request) {
         return service.cashChanged(request.getUserId(), request.getUserName(), request.getSum());
     }
