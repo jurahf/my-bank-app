@@ -1,10 +1,13 @@
 package com.bank.front.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.bank.front.services.AccountService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.client.RestClient;
 
 /**
  * Контроллер main.html.
@@ -30,9 +33,11 @@ import org.springframework.web.client.RestClient;
 @Controller
 public class MainController {
 
-    @Autowired
-    private RestClient restClient;
+    private final AccountService accountService;
 
+    public MainController(AccountService accountService) {
+        this.accountService = accountService;
+    }
 
     /**
      * GET /.
@@ -45,13 +50,20 @@ public class MainController {
 
     /**
      * GET /account.
-     * Что нужно сделать:
-     * 1. Сходить в сервис accounts через Gateway API для получения данных аккаунта по REST
-     * 2. Заполнить модель main.html полученными из ответа данными
-     * 3. Текущего пользователя можно получить из контекста Security
      */
     @GetMapping("/account")
     public String getAccount(Model model) {
+        String login = "";
+
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth instanceof OAuth2AuthenticationToken) {
+            login = (String) ((OAuth2AuthenticationToken) auth)
+                    .getPrincipal()
+                    .getAttributes()
+                    .get("preferred_username");
+        }
+
+        accountService.fillModel(model, login, null, null);
         return "main";
     }
 //
