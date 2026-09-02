@@ -2,8 +2,16 @@ server:
   port: 8086
 
 spring:
+  main:
+    allow-bean-definition-overriding: true
   application:
     name: gatewayapi
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/bank
   config:
     import:
       - "optional:consul:"
@@ -52,21 +60,29 @@ spring:
           order: 10
           predicates:
             - Path=/api/account/**
+          filters:
+            - name: JwtTokenRelay
         - id: notifications-service
           uri: http://localhost:8083
           order: 20
           predicates:
             - Path=/api/notify/**
+          filters:
+            - name: JwtTokenRelay
         - id: cash-service
           uri: http://localhost:8084
           order: 30
           predicates:
             - Path=/api/cash/**
+          filters:
+            - name: JwtTokenRelay
         - id: transfer-service
           uri: http://localhost:8085
           order: 40
           predicates:
             - Path=/api/transfer/**
+          filters:
+            - name: JwtTokenRelay
 
 springdoc:
   swagger-ui:
