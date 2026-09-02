@@ -5,17 +5,17 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
 @Service
 public class AccountRemoteService {
-    // TODO: авторизация
     private static final String ACCOUNTS_URL = "http://accounts/api/account";
 
     @Autowired
-    private RestTemplate restTemplate;
+    private RestClient restClient;
 
     public boolean cashChange(String login, double delta) {
         try {
@@ -33,9 +33,10 @@ public class AccountRemoteService {
     }
 
     private void send(String path, Object body) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        restTemplate.put(ACCOUNTS_URL + path, new HttpEntity<>(body, headers));
+        restClient.put()
+            .uri(ACCOUNTS_URL + path)
+            .body(body)
+            .headers(h -> h.setContentType(MediaType.APPLICATION_JSON))
+            .retrieve();
     }
 }
