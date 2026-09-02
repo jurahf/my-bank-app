@@ -10,6 +10,18 @@ services:
     depends_on:
       keycloak:
         condition: service_healthy        
+        
+  gatewayapi:
+    build:
+      context: ./gatewayapi
+    ports:
+      - "8086:8086"
+    container_name: gatewayapi
+    environment:
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/bank
+    depends_on:
+      keycloak:
+        condition: service_healthy        
 
   accounts:
     build:
@@ -22,6 +34,42 @@ services:
     depends_on:
       keycloak:
         condition: service_healthy
+        
+  cash:
+    build:
+      context: ./cash
+    ports:
+      - "8084:8084"
+    container_name: cash
+    environment:
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/bank
+    depends_on:
+      keycloak:
+        condition: service_healthy
+
+  transfer:
+    build:
+      context: ./transfer
+    ports:
+      - "8085:8085"
+    container_name: transfer
+    environment:
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/bank
+    depends_on:
+      keycloak:
+        condition: service_healthy
+
+  notifications:
+    build:
+      context: ./notifications
+    ports:
+      - "8083:8083"
+    container_name: notifications
+    environment:
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/bank
+    depends_on:
+      keycloak:
+        condition: service_healthy        
         
   keycloak:
     image: quay.io/keycloak/keycloak:26.1.3
