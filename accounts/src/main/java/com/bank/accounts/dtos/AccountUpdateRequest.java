@@ -5,14 +5,14 @@ import java.util.Date;
 public class AccountUpdateRequest {
     private String name;
 
-    private Date BirthDate;
+    private Date birthDate;
 
     public Date getBirthDate() {
-        return BirthDate;
+        return birthDate;
     }
 
     public void setBirthDate(Date birthDate) {
-        BirthDate = birthDate;
+        this.birthDate = birthDate;
     }
 
     public String getName() {

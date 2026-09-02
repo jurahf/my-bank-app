@@ -1,11 +1,14 @@
 package com.bank.front.services;
 
 import com.bank.front.dtos.AccountShortDto;
+import com.bank.front.dtos.CashAction;
 import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.client.RestClient;
+
+import javax.naming.Name;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -46,5 +49,38 @@ public class AccountService {
         model.addAttribute("accounts", accounts);
         model.addAttribute("errors", errors);
         model.addAttribute("info", info);
+    }
+
+    public void updateAccount(String login, String name, LocalDate birthDate) {
+        restClient.put()
+                .uri(gatewayBaseUrl + "/api/account/{login}", login)
+                .body(Map.of(
+                        "name", name,
+                        "birthDate", birthDate.toString()))
+                .retrieve();
+    }
+
+    public void updateCash(String login, double value, CashAction action) {
+
+        double delta = value;
+        if (action == CashAction.GET)
+            delta = -delta;
+
+        restClient.post()
+                .uri(gatewayBaseUrl + "/api/cash")
+                .body(Map.of(
+                        "login", login,
+                        "delta", Double.toString(delta)))
+                .retrieve();
+    }
+
+    public void transfer(String loginFrom, String loginTo, double sum) {
+        restClient.post()
+                .uri(gatewayBaseUrl + "/api/transfer")
+                .body(Map.of(
+                        "loginFrom", loginFrom,
+                        "loginTo", loginTo,
+                        "sum", Double.toString(sum)))
+                .retrieve();
     }
 }
