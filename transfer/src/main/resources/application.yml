@@ -1,0 +1,22 @@
+server:
+  port: 8085
+spring:
+  application:
+    name: transfer
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/bank
+  config:
+    import:
+      - "optional:consul:"
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: transfer
+      config:
+        enabled: true            # Включаем Consul Config для внешней конфигурации
+        defaultContext: application

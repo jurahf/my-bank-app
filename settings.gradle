@@ -1,0 +1,8 @@
+rootProject.name = 'my-bank-app'
+
+include 'front'
+include 'accounts'
+include 'notifications'
+include 'cash'
+include 'transfer'
+include 'gatewayapi'

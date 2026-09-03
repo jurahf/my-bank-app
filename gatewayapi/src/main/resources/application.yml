@@ -1,0 +1,97 @@
+server:
+  port: 8086
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: gatewayapi
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/bank
+  config:
+    import:
+      - "optional:consul:"
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: gatewayapi
+      config:
+        enabled: true            # Включаем Consul Config для внешней конфигурации
+        defaultContext: application
+    gateway:
+      mvc:
+        routes:
+        - id: accounts-api-docs
+          uri: lb://accounts
+          order: 1
+          predicates:
+            - Path=/api-docs/accounts/**
+          filters:
+            - RewritePath=/api-docs/accounts/(?<segment>.*),/${segment}
+        - id: notifications-api-docs
+          uri: lb://notifications
+          order: 2
+          predicates:
+            - Path=/api-docs/notifications/**
+          filters:
+            - RewritePath=/api-docs/notifications/(?<segment>.*),/${segment}
+        - id: cash-api-docs
+          uri: lb://cash
+          order: 3
+          predicates:
+            - Path=/api-docs/cash/**
+          filters:
+            - RewritePath=/api-docs/cash/(?<segment>.*),/${segment}
+        - id: transfer-api-docs
+          uri: lb://transfer
+          order: 4
+          predicates:
+            - Path=/api-docs/transfer/**
+          filters:
+            - RewritePath=/api-docs/transfer/(?<segment>.*),/${segment}
+        - id: accounts-service
+          uri: lb://accounts
+          order: 10
+          predicates:
+            - Path=/api/account/**
+          filters:
+            - name: JwtTokenRelay
+        - id: notifications-service
+          uri: lb://notifications
+          order: 20
+          predicates:
+            - Path=/api/notify/**
+          filters:
+            - name: JwtTokenRelay
+        - id: cash-service
+          uri: lb://cash
+          order: 30
+          predicates:
+            - Path=/api/cash/**
+          filters:
+            - name: JwtTokenRelay
+        - id: transfer-service
+          uri: lb://transfer
+          order: 40
+          predicates:
+            - Path=/api/transfer/**
+          filters:
+            - name: JwtTokenRelay
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: accounts
+        url: /api-docs/accounts/v3/api-docs
+      - name: notifications
+        url: /api-docs/notifications/v3/api-docs
+      - name: cash
+        url: /api-docs/cash/v3/api-docs
+      - name: transfer
+        url: /api-docs/transfer/v3/api-docs
