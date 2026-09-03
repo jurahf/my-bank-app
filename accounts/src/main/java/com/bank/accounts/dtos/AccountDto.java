@@ -1,11 +1,12 @@
 package com.bank.accounts.dtos;
 
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class AccountDto {
 
-    public AccountDto(String id, String name, Date birthDate, Double money) {
+    public AccountDto(String id, String name, Date birthDate, BigDecimal money) {
         this.id = id;
         this.name = name;
         BirthDate = birthDate;
@@ -18,7 +19,7 @@ public class AccountDto {
 
     private Date BirthDate;
 
-    private Double money;
+    private BigDecimal money;
 
     public String getId() {
         return id;
@@ -44,11 +45,11 @@ public class AccountDto {
         BirthDate = birthDate;
     }
 
-    public Double getMoney() {
+    public BigDecimal getMoney() {
         return money;
     }
 
-    public void setMoney(Double money) {
+    public void setMoney(BigDecimal money) {
         this.money = money;
     }
 }

@@ -3,6 +3,8 @@ package com.bank.notifications.dtos;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
+
 public class CashNotifyRequest {
 
     @NotBlank(message="UserId должен быть заполнен")
@@ -12,13 +14,13 @@ public class CashNotifyRequest {
     private String userName;
 
     @NotNull
-    private double sum;
+    private BigDecimal sum;
 
-    public double getSum() {
+    public BigDecimal getSum() {
         return sum;
     }
 
-    public void setSum(double sum) {
+    public void setSum(BigDecimal sum) {
         this.sum = sum;
     }
 

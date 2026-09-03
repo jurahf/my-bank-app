@@ -6,10 +6,13 @@ import com.bank.accounts.dtos.CashChangeRequest;
 import com.bank.accounts.dtos.ShortAccountDto;
 import com.bank.accounts.models.AccountModel;
 import com.bank.accounts.repositories.AccountRepository;
+import jakarta.persistence.LockModeType;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,23 +65,24 @@ public class AccountService {
         return result;
     }
 
+    @Transactional
     public AccountDto cashChange(String login, CashChangeRequest request) {
-        Optional<AccountModel> modelOpt = repository.findById(login);
+        Optional<AccountModel> modelOpt = repository.findByIdWithPessimisticLock(login);
 
         if (modelOpt.isEmpty())
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 
         AccountModel model = modelOpt.get();
 
-        double summ = model.getMoney() + request.delta;
-        if (summ < 0)
+        BigDecimal summ = model.getMoney().add(request.getDelta());
+        if (summ.compareTo(BigDecimal.ZERO) < 0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 
         model.setMoney(summ);
         repository.save(model);
 
         AccountDto result = getByLogin(login);
-        notificationRemoteService.cashChanged(result, request.delta);
+        notificationRemoteService.cashChanged(result, request.getDelta());
 
         return result;
     }

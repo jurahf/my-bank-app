@@ -1,13 +1,15 @@
 package com.bank.accounts.dtos;
 
-public class CashChangeRequest {
-    public double delta;
+import java.math.BigDecimal;
 
-    public double getDelta() {
+public class CashChangeRequest {
+    private BigDecimal delta;
+
+    public BigDecimal getDelta() {
         return delta;
     }
 
-    public void setDelta(double delta) {
+    public void setDelta(BigDecimal delta) {
         this.delta = delta;
     }
 }

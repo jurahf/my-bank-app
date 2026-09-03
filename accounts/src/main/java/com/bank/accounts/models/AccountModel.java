@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -22,7 +23,7 @@ public class AccountModel {
     private Date birthDate;
 
     @Column(name = "money")
-    private Double money;
+    private BigDecimal money;
 
     public String getId() {
         return id;
@@ -48,11 +49,11 @@ public class AccountModel {
         this.birthDate = birthDate;
     }
 
-    public Double getMoney() {
+    public BigDecimal getMoney() {
         return money;
     }
 
-    public void setMoney(Double money) {
+    public void setMoney(BigDecimal money) {
         this.money = money;
     }
 }

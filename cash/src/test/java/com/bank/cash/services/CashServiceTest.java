@@ -7,6 +7,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -23,21 +25,21 @@ class CashServiceTest {
     void getOrPutMoneyReturnsTrueOnSuccess() {
         CashRequest req = new CashRequest();
         req.setLogin("user1");
-        req.setDelta(100);
+        req.setDelta(BigDecimal.valueOf(100));
 
-        when(accountRemoteService.cashChange("user1", 100)).thenReturn(true);
+        when(accountRemoteService.cashChange("user1", BigDecimal.valueOf(100))).thenReturn(true);
 
         assertTrue(cashService.getOrPutMoney(req));
-        verify(accountRemoteService).cashChange("user1", 100);
+        verify(accountRemoteService).cashChange("user1", BigDecimal.valueOf(100));
     }
 
     @Test
     void getOrPutMoneyReturnsFalseOnFailure() {
         CashRequest req = new CashRequest();
         req.setLogin("user1");
-        req.setDelta(-50);
+        req.setDelta(BigDecimal.valueOf(-50));
 
-        when(accountRemoteService.cashChange("user1", -50)).thenReturn(false);
+        when(accountRemoteService.cashChange("user1", BigDecimal.valueOf(-50))).thenReturn(false);
 
         assertFalse(cashService.getOrPutMoney(req));
     }

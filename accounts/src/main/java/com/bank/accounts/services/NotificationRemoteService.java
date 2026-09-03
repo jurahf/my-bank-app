@@ -2,13 +2,11 @@ package com.bank.accounts.services;
 
 import com.bank.accounts.dtos.AccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Service
@@ -34,7 +32,7 @@ public class NotificationRemoteService {
         }
     }
 
-    public void cashChanged(AccountDto account, double delta) {
+    public void cashChanged(AccountDto account, BigDecimal delta) {
         try {
 
             Map<String, Object> body = Map.of(

@@ -3,6 +3,8 @@ package com.bank.notifications.services;
 import com.bank.notifications.services.senders.NotifySender;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
 public class NotifyService {
 
@@ -20,12 +22,12 @@ public class NotifyService {
         return text;
     }
 
-    public String cashChanged(String userId, String userName, double sum) {
+    public String cashChanged(String userId, String userName, BigDecimal sum) {
        String text = "";
-       if (sum < 0)
-           text = "Списание на " + Double.toString(sum);
+       if (sum.compareTo(BigDecimal.ZERO) < 0)
+           text = "Списание на " + sum.toPlainString();
        else
-           text = "Пополнение на " + Double.toString(sum);
+           text = "Пополнение на " + sum.toPlainString();
 
         sender.send(userId, text);
 

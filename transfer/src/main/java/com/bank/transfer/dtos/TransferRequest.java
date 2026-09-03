@@ -1,11 +1,13 @@
 package com.bank.transfer.dtos;
 
+import java.math.BigDecimal;
+
 public class TransferRequest {
     private String loginFrom;
 
     private String loginTo;
 
-    private double sum;
+    private BigDecimal sum;
 
     public String getLoginFrom() {
         return loginFrom;
@@ -23,11 +25,11 @@ public class TransferRequest {
         this.loginTo = loginTo;
     }
 
-    public double getSum() {
+    public BigDecimal getSum() {
         return sum;
     }
 
-    public void setSum(double sum) {
+    public void setSum(BigDecimal sum) {
         this.sum = sum;
     }
 }

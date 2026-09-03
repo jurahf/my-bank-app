@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +40,7 @@ class AccountServiceTest {
         m.setId(id);
         m.setName(name);
         m.setBirthDate(new Date());
-        m.setMoney(money);
+        m.setMoney(BigDecimal.valueOf(money));
         return m;
     }
 
@@ -62,7 +63,7 @@ class AccountServiceTest {
 
         assertEquals("u1", result.getId());
         assertEquals("User One", result.getName());
-        assertEquals(100.0, result.getMoney());
+        assertEquals(BigDecimal.valueOf(100), result.getMoney());
     }
 
     @Test
@@ -90,23 +91,24 @@ class AccountServiceTest {
 
     @Test
     void cashChangeIncreasesBalance() {
-        when(repository.findById("u1")).thenReturn(Optional.of(model("u1", "User One", 100)));
+        when(repository.findByIdWithPessimisticLock("u1")).thenReturn(Optional.of(model("u1", "User One", 100)));
+        when(repository.findById("u1")).thenReturn(Optional.of(model("u1", "User One", 150)));
 
         CashChangeRequest req = new CashChangeRequest();
-        req.setDelta(50);
+        req.setDelta(BigDecimal.valueOf(50));
 
         AccountDto result = service.cashChange("u1", req);
 
-        assertEquals(150.0, result.getMoney());
-        verify(notificationRemoteService).cashChanged(any(AccountDto.class), eq(50.0));
+        assertEquals(BigDecimal.valueOf(150), result.getMoney());
+        verify(notificationRemoteService).cashChanged(any(AccountDto.class), eq(BigDecimal.valueOf(50)));
     }
 
     @Test
     void cashChangeRejectsNegativeBalance() {
-        when(repository.findById("u1")).thenReturn(Optional.of(model("u1", "User One", 10)));
+        when(repository.findByIdWithPessimisticLock("u1")).thenReturn(Optional.of(model("u1", "User One", 10)));
 
         CashChangeRequest req = new CashChangeRequest();
-        req.setDelta(-50);
+        req.setDelta(BigDecimal.valueOf(-50));
 
         ResponseStatusException ex = assertThrows(ResponseStatusException.class, () -> service.cashChange("u1", req));
 

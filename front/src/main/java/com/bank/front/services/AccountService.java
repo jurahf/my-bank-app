@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.client.RestClient;
 
-import javax.naming.Name;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -60,27 +60,27 @@ public class AccountService {
                 .retrieve();
     }
 
-    public void updateCash(String login, double value, CashAction action) {
+    public void updateCash(String login, BigDecimal value, CashAction action) {
 
-        double delta = value;
+        BigDecimal delta = value;
         if (action == CashAction.GET)
-            delta = -delta;
+            delta = delta.negate();
 
         restClient.post()
                 .uri(gatewayBaseUrl + "/api/cash")
                 .body(Map.of(
                         "login", login,
-                        "delta", Double.toString(delta)))
+                        "delta", delta.toPlainString()))
                 .retrieve();
     }
 
-    public void transfer(String loginFrom, String loginTo, double sum) {
+    public void transfer(String loginFrom, String loginTo, BigDecimal sum) {
         restClient.post()
                 .uri(gatewayBaseUrl + "/api/transfer")
                 .body(Map.of(
                         "loginFrom", loginFrom,
                         "loginTo", loginTo,
-                        "sum", Double.toString(sum)))
+                        "sum", sum.toPlainString()))
                 .retrieve();
     }
 }

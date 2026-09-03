@@ -9,6 +9,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -25,18 +27,18 @@ class TransferServiceTest {
         TransferRequest req = new TransferRequest();
         req.setLoginFrom(from);
         req.setLoginTo(to);
-        req.setSum(sum);
+        req.setSum(BigDecimal.valueOf(sum));
         return req;
     }
 
     @Test
     void execTransferSuccess() {
-        when(accountRemoteService.cashChange("user1", -100)).thenReturn(true);
-        when(accountRemoteService.cashChange("user2", 100)).thenReturn(true);
+        when(accountRemoteService.cashChange("user1", BigDecimal.valueOf(-100))).thenReturn(true);
+        when(accountRemoteService.cashChange("user2", BigDecimal.valueOf(100))).thenReturn(true);
 
         assertTrue(transferService.ExecTransfer(request("user1", "user2", 100)));
-        verify(accountRemoteService).cashChange("user1", -100);
-        verify(accountRemoteService).cashChange("user2", 100);
+        verify(accountRemoteService).cashChange("user1", BigDecimal.valueOf(-100));
+        verify(accountRemoteService).cashChange("user2", BigDecimal.valueOf(100));
     }
 
     @Test
@@ -47,21 +49,20 @@ class TransferServiceTest {
 
     @Test
     void execTransferRollbackOnSecondPartFailure() {
-        when(accountRemoteService.cashChange("user1", -100)).thenReturn(true);
-        when(accountRemoteService.cashChange("user2", 100)).thenReturn(false);
+        when(accountRemoteService.cashChange("user1", BigDecimal.valueOf(-100))).thenReturn(true);
+        when(accountRemoteService.cashChange("user2", BigDecimal.valueOf(100))).thenReturn(false);
 
         assertFalse(transferService.ExecTransfer(request("user1", "user2", 100)));
 
-        // rollback: crediting user1 back
-        verify(accountRemoteService).cashChange("user1", 100);
+        verify(accountRemoteService).cashChange("user1", BigDecimal.valueOf(100));
     }
 
     @Test
     void execTransferFailsIfFirstPartFails() {
-        when(accountRemoteService.cashChange("user1", -100)).thenReturn(false);
+        when(accountRemoteService.cashChange("user1", BigDecimal.valueOf(-100))).thenReturn(false);
 
         assertFalse(transferService.ExecTransfer(request("user1", "user2", 100)));
 
-        verify(accountRemoteService, never()).cashChange(eq("user2"), anyDouble());
+        verify(accountRemoteService, never()).cashChange(eq("user2"), any(BigDecimal.class));
     }
 }

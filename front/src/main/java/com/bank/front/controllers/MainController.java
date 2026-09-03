@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
@@ -94,7 +95,7 @@ public class MainController {
     ) {
         String login = getLogin();
 
-        accountService.updateCash(login, value, action);
+        accountService.updateCash(login, BigDecimal.valueOf(value), action);
         accountService.fillModel(model, login, null, null);
 
         return "main";
@@ -114,7 +115,7 @@ public class MainController {
     ) {
         String loginFrom = getLogin();
 
-        accountService.transfer(loginFrom, loginTo, value);
+        accountService.transfer(loginFrom, loginTo, BigDecimal.valueOf(value));
         accountService.fillModel(model, loginFrom, null, null);
 
         return "main";

@@ -1,13 +1,11 @@
 package com.bank.transfer.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Service
@@ -17,10 +15,10 @@ public class AccountRemoteService {
     @Autowired
     private RestClient restClient;
 
-    public boolean cashChange(String login, double delta) {
+    public boolean cashChange(String login, BigDecimal delta) {
         try {
             Map<String, String> body = Map.of(
-                    "delta", Double.toString(delta)
+                    "delta", delta.toPlainString()
             );
             send("/" + login + "/cashChange", body);
             return true;
