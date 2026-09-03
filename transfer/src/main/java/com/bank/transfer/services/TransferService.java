@@ -16,7 +16,7 @@ public class TransferService {
         this.accountRemoteService = accountRemoteService;
     }
 
-    public boolean ExecTransfer(TransferRequest request) {
+    public boolean execTransfer(TransferRequest request) {
         if (request.getSum().compareTo(BigDecimal.ZERO) <= 0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 

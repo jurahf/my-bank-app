@@ -20,7 +20,7 @@ public class TransferController {
 
     @PostMapping
     @PreAuthorize("hasRole('TRANSFER')")
-    public boolean Transfer(@RequestBody TransferRequest request) {
-        return service.ExecTransfer(request);
+    public boolean transfer(@RequestBody TransferRequest request) {
+        return service.execTransfer(request);
     }
 }
